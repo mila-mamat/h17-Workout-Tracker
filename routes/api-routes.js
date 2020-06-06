@@ -1,37 +1,70 @@
 const router = require("express").Router();
-const db = require('../models');
+const db = require("../models");
 
+//find and return the list of all workouts created
 router.get("/api/workouts", (req, res) => {
   db.Workout.find({})
-    .sort({ date: -1 })
-    .then(dbWorkout => {
+    .sort({
+      date: -1
+    })
+    .populate("exercises")
+    .then((dbWorkout) => {
       res.json(dbWorkout);
     })
-    .catch(err => {
+    .catch((err) => {
       res.status(400).json(err);
     });
 });
 
-// router.post("/api/transaction", ({ body }, res) => {
-//   Transaction.create(body)
-//     .then(dbTransaction => {
-//       res.json(dbTransaction);
-//     })
-//     .catch(err => {
-//       res.status(400).json(err);
-//     });
-// });
+//create a new workout
+router.post("/api/workouts", (req, res) => {
+  const workout = new db.Workout({
+    day: Date.now(),
+    exercises: []
+  });
+  workout
+    .save()
+    .then((dbWorkout) => res.status(201).json(dbWorkout))
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
 
-// router.post("/api/transaction/bulk", ({ body }, res) => {
-//   Transaction.insertMany(body)
-//     .then(dbTransaction => {
-//       res.json(dbTransaction);
-//     })
-//     .catch(err => {
-//       res.status(400).json(err);
-//     });
-// });
+//add new exercise to a specific workout plan
+router.put("/api/workouts/:id", (req, res) => {
+  const exercise = new db.Exercise(req.body);
+  exercise.save();
+
+  db.Workout.findOneAndUpdate({
+      _id: req.params.id
+    }, {
+      $push: {
+        exercises: exercise._id
+      }
+    })
+    .then((dbWorkout) => {
+      res.json(dbWorkout);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
 
 
+
+//get workouts in a range ???
+router.get("/api/workouts/range", (req, res) => {
+  db.Workout.find({})
+    .sort({
+      date: -1
+    })
+    .populate("exercises")
+    .then((dbWorkout) => {
+      res.json(dbWorkout);
+    })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
 
 module.exports = router;

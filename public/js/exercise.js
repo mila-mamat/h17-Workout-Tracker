@@ -19,11 +19,12 @@ let shouldNavigateAway = false;
 
 async function initExercise() {
   let workout;
-
+  // if user is adding exercise to a new workout, create one first
   if (location.search.split("=")[1] === undefined) {
     workout = await API.createWorkout()
-    console.log(workout)
   }
+
+  //update url with the workout id so that workout id can be obtained easily while using APIs
   if (workout) {
     location.search = "?id=" + workout._id;
   }
@@ -32,6 +33,7 @@ async function initExercise() {
 
 initExercise();
 
+//display different fields to fill based on exercise type
 function handleWorkoutTypeChange(event) {
   workoutType = event.target.value;
 
@@ -49,6 +51,7 @@ function handleWorkoutTypeChange(event) {
   validateInputs();
 }
 
+//make sure all fields are non-blank before adding the exercise to workout plan
 function validateInputs() {
   let isValid = true;
 
@@ -87,9 +90,11 @@ function validateInputs() {
   }
 
   if (isValid) {
+    //enable complete/add btn if all fields are filled
     completeButton.removeAttribute("disabled");
     addButton.removeAttribute("disabled");
   } else {
+    //disable complete/add btn if any one of the field is missing 
     completeButton.setAttribute("disabled", true);
     addButton.setAttribute("disabled", true);
   }
@@ -99,7 +104,7 @@ async function handleFormSubmit(event) {
   event.preventDefault();
 
   let workoutData = {};
-
+// retrieve and format the data in the form submitted
   if (workoutType === "cardio") {
     workoutData.type = "cardio";
     workoutData.name = cardioNameInput.value.trim();
@@ -114,8 +119,11 @@ async function handleFormSubmit(event) {
     workoutData.duration = Number(resistanceDurationInput.value.trim());
   }
 
+  // add the exercise data submitted to the workout plan
   await API.addExercise(workoutData);
+  //clear inputs in the form after submission
   clearInputs();
+  // notify successful submission
   toast.classList.add("success");
 }
 
@@ -126,6 +134,7 @@ function handleToastAnimationEnd() {
   }
 }
 
+//clear inputs in he form after submission
 function clearInputs() {
   cardioNameInput.value = "";
   nameInput.value = "";
@@ -137,18 +146,22 @@ function clearInputs() {
   weightInput.value = "";
 }
 
+
 if (workoutTypeSelect) {
   workoutTypeSelect.addEventListener("change", handleWorkoutTypeChange);
 }
+//navigate to the index page onclick of complete btn
 if (completeButton) {
   completeButton.addEventListener("click", function (event) {
     shouldNavigateAway = true;
     handleFormSubmit(event);
   });
 }
+// submit form to add exercise 
 if (addButton) {
   addButton.addEventListener("click", handleFormSubmit);
 }
+
 toast.addEventListener("animationend", handleToastAnimationEnd);
 
 document
