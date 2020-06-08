@@ -9,7 +9,7 @@
 <h2 align="center">Workout Tracker</h2>
 
 <h3 align="center">
- Node, Express, MongoDB
+ Node, Express, MongoDB, indexedDB
 
 </h3>
 <br />
