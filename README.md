@@ -9,7 +9,7 @@
 <h2 align="center">Workout Tracker</h2>
 
 <h3 align="center">
- Node, Express, MongoDB, indexedDB
+ Node, Express, MongoDB, Mongoose, indexedDB
 
 </h3>
 <br />
@@ -19,6 +19,7 @@
 ## Table of Contents
 * [Project Description](#project-description)
 * [App URL](#app-url)
+* [Usage](#usage)
 * [Installation](#installation)
 * [Badges](#badges)
 * [Contributing](#contributing)
@@ -41,7 +42,19 @@ If the exercise is a cardio exercise, I should be able to track my distance trav
 ## App URL
  Link to website: https://workout-tracker-36.herokuapp.com/
  
+## Usage
+1. Createing a workout and add exercises for a new day
+<img src="https://github.com/mila-mamat/h17-Workout-Tracker/blob/master/gif/create-workout.gif"  width="700" height="400">
 
+
+2. Continously add exercises to an existing workout
+<img src="https://github.com/mila-mamat/h17-Workout-Tracker/blob/master/gif/continue-workout.gif"  width="700" height="400">
+
+3. View graphic summary of daily workouts
+<img src="https://github.com/mila-mamat/h17-Workout-Tracker/blob/master/gif/Screen%20Shot%202020-06-08%20at%206.37.43%20PM.png"  width="700" height="400">
+
+4. Save exercise to indexedDB if the app is offline
+<img src="https://github.com/mila-mamat/h17-Workout-Tracker/blob/master/gif/indexedDB.mov"  width="700" height="400">
 
 ## Installation
 ### Prerequisites
