@@ -54,7 +54,7 @@ If the exercise is a cardio exercise, I should be able to track my distance trav
 <img src="https://github.com/mila-mamat/h17-Workout-Tracker/blob/master/gif/Screen%20Shot%202020-06-08%20at%206.37.43%20PM.png"  width="700" height="400">
 
 4. Save exercise to indexedDB if the app is offline
-<img src="https://github.com/mila-mamat/h17-Workout-Tracker/blob/master/gif/indexedDB.mov"  width="700" height="400">
+<img src="https://github.com/mila-mamat/h17-Workout-Tracker/blob/master/gif/indexdb.gif"  width="700" height="400">
 
 ## Installation
 ### Prerequisites
