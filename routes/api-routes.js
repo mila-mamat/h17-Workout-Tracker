@@ -5,7 +5,7 @@ const db = require("../models");
 router.get("/api/workouts", (req, res) => {
   db.Workout.find({})
     .sort({
-      date: -1
+      date: -1,
     })
     .populate("exercises")
     .then((dbWorkout) => {
@@ -20,7 +20,7 @@ router.get("/api/workouts", (req, res) => {
 router.post("/api/workouts", (req, res) => {
   const workout = new db.Workout({
     day: Date.now(),
-    exercises: []
+    exercises: [],
   });
   workout
     .save()
@@ -35,13 +35,45 @@ router.put("/api/workouts/:id", (req, res) => {
   const exercise = new db.Exercise(req.body);
   exercise.save();
 
-  db.Workout.findOneAndUpdate({
-      _id: req.params.id
-    }, {
+  db.Workout.findOneAndUpdate(
+    {
+      _id: req.params.id,
+    },
+    {
       $push: {
-        exercises: exercise._id
-      }
+        exercises: exercise._id,
+      },
+    }
+  )
+    .then((dbWorkout) => {
+      res.json(dbWorkout);
     })
+    .catch((err) => {
+      res.status(400).json(err);
+    });
+});
+
+//add indexeddb saved exercise to a specific workout plan
+router.put("/api/workouts/bulk/:id", (req, res) => {
+  const data = req.body;
+  let exerciseID = [];
+
+  data.forEach((exercises) => {
+    exercise = new db.Exercise(exercises);
+    exercise.save();
+    exerciseID.push(exercise._id);
+  });
+
+  db.Workout.findOneAndUpdate(
+    {
+      _id: req.params.id,
+    },
+    {
+      $push: {
+        exercises: [...exerciseID],
+      },
+    }
+  )
     .then((dbWorkout) => {
       res.json(dbWorkout);
     })
@@ -51,12 +83,11 @@ router.put("/api/workouts/:id", (req, res) => {
 });
 
 
-
 //get workouts in a range ???
 router.get("/api/workouts/range", (req, res) => {
   db.Workout.find({})
     .sort({
-      date: -1
+      date: -1,
     })
     .populate("exercises")
     .then((dbWorkout) => {

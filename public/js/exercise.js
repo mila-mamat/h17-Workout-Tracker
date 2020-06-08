@@ -12,7 +12,7 @@ const distanceInput = document.querySelector("#distance");
 const completeButton = document.querySelector("button.complete");
 const addButton = document.querySelector("button.add-another");
 const toast = document.querySelector("#toast");
-const newWorkout = document.querySelector(".new-workout")
+const newWorkout = document.querySelector(".new-workout");
 
 let workoutType = null;
 let shouldNavigateAway = false;
@@ -21,14 +21,13 @@ async function initExercise() {
   let workout;
   // if user is adding exercise to a new workout, create one first
   if (location.search.split("=")[1] === undefined) {
-    workout = await API.createWorkout()
+    workout = await API.createWorkout();
   }
 
   //update url with the workout id so that workout id can be obtained easily while using APIs
   if (workout) {
     location.search = "?id=" + workout._id;
   }
-
 }
 
 initExercise();
@@ -94,7 +93,7 @@ function validateInputs() {
     completeButton.removeAttribute("disabled");
     addButton.removeAttribute("disabled");
   } else {
-    //disable complete/add btn if any one of the field is missing 
+    //disable complete/add btn if any one of the field is missing
     completeButton.setAttribute("disabled", true);
     addButton.setAttribute("disabled", true);
   }
@@ -104,7 +103,7 @@ async function handleFormSubmit(event) {
   event.preventDefault();
 
   let workoutData = {};
-// retrieve and format the data in the form submitted
+  // retrieve and format the data in the form submitted
   if (workoutType === "cardio") {
     workoutData.type = "cardio";
     workoutData.name = cardioNameInput.value.trim();
@@ -120,7 +119,13 @@ async function handleFormSubmit(event) {
   }
 
   // add the exercise data submitted to the workout plan
-  await API.addExercise(workoutData);
+  try {
+    await API.addExercise(workoutData);
+ 
+  } catch (err) {
+    saveExercise(workoutData);
+    console.log("App is offline. Exercise is saved to indexedDB");
+  }
   //clear inputs in the form after submission
   clearInputs();
   // notify successful submission
@@ -146,7 +151,6 @@ function clearInputs() {
   weightInput.value = "";
 }
 
-
 if (workoutTypeSelect) {
   workoutTypeSelect.addEventListener("change", handleWorkoutTypeChange);
 }
@@ -157,7 +161,7 @@ if (completeButton) {
     handleFormSubmit(event);
   });
 }
-// submit form to add exercise 
+// submit form to add exercise
 if (addButton) {
   addButton.addEventListener("click", handleFormSubmit);
 }
@@ -166,4 +170,4 @@ toast.addEventListener("animationend", handleToastAnimationEnd);
 
 document
   .querySelectorAll("input")
-  .forEach(element => element.addEventListener("input", validateInputs));
+  .forEach((element) => element.addEventListener("input", validateInputs));
