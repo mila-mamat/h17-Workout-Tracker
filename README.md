@@ -1,6 +1,5 @@
 # h17-Workout-Tracker
 
-
 <br />
 <p align="center">
 
